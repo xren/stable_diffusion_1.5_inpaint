@@ -22,7 +22,7 @@ def make_scheduler(name, config):
         'DDIM': DDIMScheduler.from_config(config),
         'K_EULER': EulerDiscreteScheduler.from_config(config),
         'K_EULER_ANCESTRAL': EulerAncestralDiscreteScheduler.from_config(config),
-        'DPMSolverMultistep': DPMSolverMultistepScheduler.from_config(config),
+        'DPMSolverMultistep': DPMSolverMuefltistepScheduler.from_config(config),
     }[name]
 
 
@@ -45,8 +45,8 @@ def inference(model_inputs):
     guidance_scale = model_inputs.get('guidance_scale', 7)
     seed = model_inputs.get('seed', None)
     scheduler = model_inputs.get('scheduler', 'K_EULER_ANCESTRAL')
-    mask_image_base64 = model_inputs.get('mask', None)
-    init_image_base64 = model_inputs.get('init_image', None)
+    mask_image_base64 = model_inputs.get('mask_image_base64', None)
+    init_image_base64 = model_inputs.get('init_image_base64', None)
 
     extra_kwargs = {}
     if not prompt:
