@@ -4,3 +4,4 @@ diffusers[torch]
 scipy
 git+https://github.com/huggingface/transformers.git
 requests
+websockets==10.0
