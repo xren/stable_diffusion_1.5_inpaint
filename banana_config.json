@@ -9,8 +9,8 @@
         "steps": 20,
         "guidance_scale": 9,
         "scheduler": "K_EULER_ANCESTRAL",
-        "init_image": "/content/image.png",
-        "mask": "/content/mask.png"
+        "init_image_base64": "xxx",
+        "mask_image_base64": "yyy"
     },
     "example_output": {
         "image_base64": "<BASE64_STRING>"

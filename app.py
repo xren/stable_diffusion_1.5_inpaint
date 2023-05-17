@@ -8,6 +8,8 @@ from torch import autocast
 import base64
 from io import BytesIO
 from PIL import Image
+import base64
+
 
 model_path = "runwayml/stable-diffusion-v1-5"
 inpainting_model_path = "runwayml/stable-diffusion-inpainting"
@@ -43,19 +45,25 @@ def inference(model_inputs):
     guidance_scale = model_inputs.get('guidance_scale', 7)
     seed = model_inputs.get('seed', None)
     scheduler = model_inputs.get('scheduler', 'K_EULER_ANCESTRAL')
-    mask = model_inputs.get('mask', None)
-    init_image = model_inputs.get('init_image', None)
+    mask_image_base64 = model_inputs.get('mask', None)
+    init_image_base64 = model_inputs.get('init_image', None)
 
     extra_kwargs = {}
     if not prompt:
         return {'message': 'No prompt was provided'}
-    if not mask:
+    if not mask_image_base64:
         return {'message': 'No mask was provided'}
-    if not init_image:
+    if not init_image_base64:
         raise ValueError("mask was provided without init_image")
-    init_image = Image.open(init_image).convert("RGB")
+
+    init_image_bytes = base64.b64decode(init_image_base64)
+    init_image = Image.open(BytesIO(init_image_bytes)).convert("RGB")
+
+    mask_image_bytes = base64.b64decode(mask_image_base64)
+    mask_image = BytesIO(BytesIO(mask_image_bytes)).convert("RGB")
+
     extra_kwargs = {
-        "mask_image": Image.open(mask).convert("RGB").resize(init_image.size),
+        "mask_image": mask_image,
         "image": init_image,
         "width": width,
         "height": height,
@@ -78,6 +86,6 @@ def inference(model_inputs):
         ).images[0]
 
     buffered = BytesIO()
-    image.save(buffered, format='JPEG')
+    image.save(buffered, format='PNG')
     image_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
     return {'image_base64': image_base64}

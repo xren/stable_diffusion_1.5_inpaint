@@ -3,3 +3,4 @@ torch
 diffusers[torch]
 scipy
 git+https://github.com/huggingface/transformers.git
+requests
