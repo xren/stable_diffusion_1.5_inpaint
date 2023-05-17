@@ -60,7 +60,7 @@ def inference(model_inputs):
     init_image = Image.open(BytesIO(init_image_bytes)).convert("RGB")
 
     mask_image_bytes = base64.b64decode(mask_image_base64)
-    mask_image = BytesIO(BytesIO(mask_image_bytes)).convert("RGB")
+    mask_image = Image.open(BytesIO(mask_image_bytes)).convert("RGB")
 
     extra_kwargs = {
         "mask_image": mask_image,
